@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Press Hotkey + [] for:"
+echo "South = Open quick menu"
+echo "East = Reset game"
+echo "West = Save state"
+echo "North = Load state"
+echo "D-pad U/D = Switch state slot"
+echo "D-pad Right = Fast-forward"
+echo "D-pad Left = Rewind (if enabled)"
+echo "L1 = Screenshot"
+echo "R1 = AI translation"
+echo "L2/R2 = Switch shader"

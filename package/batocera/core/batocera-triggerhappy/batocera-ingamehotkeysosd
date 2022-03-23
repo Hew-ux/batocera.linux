@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# This aims to show the user the available in-game hotkeys if they hold down the hotkey for a short amount of time.
+STATE=$1
+
+# When the script is first called and the button is held down...
+if test "${STATE}" = "1"
+then
+    # Create flag
+    FLAGN=$$
+    if echo "${FLAGN}" > /var/run/ingamehotkeysosd.flag
+    then
+	    # Wait one second.
+	    sleep 1
+        # Then check if the flag is still set.
+        if test -e /var/run/ingamehotkeysosd.flag
+        then
+            # If it's still being held, display ingamehotkeysosd.
+            /usr/bin/batocera-ingamehotkeys | HOME=/userdata/system XAUTHORITY=/var/lib/.Xauthority DISPLAY=:0.0 osd_cat -f -*-*-bold-*-*-*-38-120-*-*-*-*-*-* -c red -s 5 -d 8 -l 16
+            # Insert while loop checking for button still being held, if not then interrupt
+        fi
+    fi
+fi
+
+# For when the button is released.
+if test "${STATE}" = "0"
+then
+    rm /var/run/ingamehotkeysosd.flag
+fi
