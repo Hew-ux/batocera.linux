@@ -1,0 +1,21 @@
+import pygame
+
+# Initialise
+pygame.init()
+displayWidth = 902
+displayHeight = 706
+surface= pygame.display.set_mode((displayWidth, displayHeight ))
+displayImage = pygame.image.load(r'/userdata/roms/pygame/ingame-hotkeys.png')
+
+# Show the image
+surface.fill((255,255,255))
+surface.blit(displayImage, (0, 0))
+# Refresh the screen to make the image visible
+pygame.display.update()
+
+# Wait five seconds
+pygame.time.wait(5000)
+
+# Exit
+pygame.quit()
+quit()
