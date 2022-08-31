@@ -1,0 +1,14 @@
+diff --git a/es-app/src/views/SystemView.cpp b/es-app/src/views/SystemView.cpp
+index 92fa3cf3..a5191519 100644
+--- a/es-app/src/views/SystemView.cpp
++++ b/es-app/src/views/SystemView.cpp
+@@ -1019,6 +1019,10 @@ std::vector<HelpPrompt> SystemView::getHelpPrompts()
+ 	}
+ #endif
+
++// 	if (UIModeController::getInstance()->isUIModeFull()) {
++// 		prompts.push_back(HelpPrompt("F3", _("TTS")));
++// 	}
++
+ 	return prompts;
+ }
