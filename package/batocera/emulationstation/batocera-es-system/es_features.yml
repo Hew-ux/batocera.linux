@@ -7031,6 +7031,12 @@ rpcs3:
             choices:
                 "16:9":  16/9
                 "4:3":   4/3
+        software_renderer:
+            prompt:      ALLOW SOFTWARE RENDERER
+            description: Allows turning on the software renderer in RPCS3's settings.
+            choices:
+                "On": True
+                "Off": False
         ppudecoder:
             group: ADVANCED OPTIONS
             prompt:      PPU DECODER

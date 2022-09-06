@@ -168,7 +168,14 @@ class Rpcs3Generator(Generator):
           if os.path.exists("/userdata/bios/PS3UPDAT.PUP"):
             commandArray = [batoceraFiles.batoceraBins[system.config['emulator']], "--installfw", "/userdata/bios/PS3UPDAT.PUP"]
 
-        return Command.Command(array=commandArray, env={"XDG_CONFIG_HOME":batoceraFiles.CONF, "XDG_CACHE_HOME":batoceraFiles.SAVES, "QT_QPA_PLATFORM":"xcb"})
+        # Environmental variables
+        # Allow for software rendering on non OGL 3.3 or Vulkan-enabled iGPUs.
+        envVar = {"XDG_CONFIG_HOME":batoceraFiles.CONF, "XDG_CACHE_HOME":batoceraFiles.SAVES, "QT_QPA_PLATFORM":"xcb"}
+        if system.isOptSet("software_renderer") and system.getOptBoolean("software_renderer") == True:
+            envVarForSC = {'LIBGL_ALWAYS_SOFTWARE': 'true', 'GALLIUM_DRIVER': 'lvmpipe'}
+            envVar.update(envVarForSC)
+
+        return Command.Command(array=commandArray, env=envVar)
 
     def getClosestRatio(gameResolution):
         # Works out the closest screen aspect ratio between the two rpcs3 options - 4:3 and 16:9.
