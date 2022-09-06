@@ -46,6 +46,12 @@ def getCurrentAspectRatio():
     val = out.decode().strip("\n")
     return val
 
+def getCurrentAspectRatio():
+    proc = subprocess.Popen(["batocera-resolution currentAspectRatio"], stdout=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
+    val = out.decode().strip("\n")
+    return val
+
 def isResolutionReversed():
     return os.path.exists("/var/run/rk-rotation")
 
