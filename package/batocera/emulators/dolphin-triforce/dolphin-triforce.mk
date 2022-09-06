@@ -7,8 +7,8 @@
 # Site https://dolphin-emu.org/download/list/Triforce/1/
 # Source https://github.com/EIGHTFINITE/dolphin-triforce
 # Dolphin version: 4.0-315
-DOLPHIN_TRIFORCE_SOURCE = 
-DOLPHIN_TRIFORCE_VERSION = 1.0.0-001
+DOLPHIN_TRIFORCE_SOURCE =
+DOLPHIN_TRIFORCE_VERSION = 1.0.0-002
 DOLPHIN_TRIFORCE_LICENSE = GPLv2+
 
 ifeq ($(BR2_PACKAGE_BATOCERA_TARGET_X86_64_ANY),y)
@@ -19,9 +19,12 @@ endif
 define DOLPHIN_TRIFORCE_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/usr/bin
 	$(INSTALL) -D -m 0555 "$(BR2_EXTERNAL_BATOCERA_PATH)/package/batocera/emulators/dolphin-triforce/dolphin-triforce.AppImage" "${TARGET_DIR}/usr/bin/dolphin-triforce"
+	mkdir -p $(TARGET_DIR)/usr/share/dolphin-triforce/StateSaves
+	cp -r $(BR2_EXTERNAL_BATOCERA_PATH)/package/batocera/emulators/dolphin-triforce/*.s01 \
+		$(TARGET_DIR)/usr/share/dolphin-triforce/StateSaves
 endef
 
-# Hotkeys (non-functional at the moment)
+# Hotkeys (internal handling not functional, may not support controller inputs)
 define DOLPHIN_TRIFORCE_EVMAP
 	mkdir -p $(TARGET_DIR)/usr/share/evmapy
 
