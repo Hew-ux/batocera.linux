@@ -95,6 +95,13 @@ case "${ACTION}" in
     "currentResolution")
 	xrandr --currentResolution | tail -n1
 	;;
+	"currentAspectRatio")
+	OUTPUT=$(xrandr --listConnectedOutputs | sed -e s+"*$"++)
+	INFO=$(xrandr | grep $OUTPUT)
+	HORASP=$(echo $INFO | awk {'print $12'} | sed -e s+"00mm$"++)
+	VERASP=$(echo $INFO | awk {'print $14'} | sed -e s+"00mm$"++)
+	echo $HORASP"/"$VERASP
+	;;
     "listOutputs")
 	xrandr --listConnectedOutputs | sed -e s+"*$"++
 	;;
