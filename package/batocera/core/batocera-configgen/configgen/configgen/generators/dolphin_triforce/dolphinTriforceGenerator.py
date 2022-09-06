@@ -7,6 +7,7 @@ import os.path
 from os import environ
 import configparser
 from . import dolphinTriforceControllers
+import requests
 
 class DolphinTriforceGenerator(Generator):
 
@@ -66,7 +67,7 @@ class DolphinTriforceGenerator(Generator):
 
         # PanicHandlers displaymessages
         dolphinTriforceSettings.set("Interface", "UsePanicHandlers",        "False")
-	
+
         # Disable OSD Messages
         if system.isOptSet("disable_osd_messages") and system.getOptBoolean("disable_osd_messages"):
             dolphinTriforceSettings.set("Interface", "OnScreenDisplayMessages", "False")
@@ -140,17 +141,17 @@ class DolphinTriforceGenerator(Generator):
         if not dolphinTriforceGFXSettings.has_section("Hacks"):
             dolphinTriforceGFXSettings.add_section("Hacks")
         if not dolphinTriforceGFXSettings.has_section("Enhancements"):
-            dolphinTriforceGFXSettings.add_section("Enhancements")             
+            dolphinTriforceGFXSettings.add_section("Enhancements")
         if not dolphinTriforceGFXSettings.has_section("Hardware"):
-            dolphinTriforceGFXSettings.add_section("Hardware")  
-            
+            dolphinTriforceGFXSettings.add_section("Hardware")
+
         # Graphics setting Aspect Ratio
         if system.isOptSet('dolphin_aspect_ratio'):
             dolphinTriforceGFXSettings.set("Settings", "AspectRatio", system.config["dolphin_aspect_ratio"])
         else:
             # set to zero, which is 'Auto' in Dolphin & Batocera
             dolphinTriforceGFXSettings.set("Settings", "AspectRatio", "0")
-        
+
         # Show fps
         if system.isOptSet("showFPS") and system.getOptBoolean("showFPS"):
             dolphinTriforceGFXSettings.set("Settings", "ShowFPS", "True")
@@ -167,7 +168,7 @@ class DolphinTriforceGenerator(Generator):
 
         # Widescreen Hack
         if system.isOptSet('widescreen_hack') and system.getOptBoolean('widescreen_hack'):
-            # Prefer Cheats than Hack 
+            # Prefer Cheats than Hack
             if system.isOptSet('enable_cheats') and system.getOptBoolean('enable_cheats'):
                 dolphinTriforceGFXSettings.set("Settings", "wideScreenHack", "False")
             else:
@@ -187,7 +188,7 @@ class DolphinTriforceGenerator(Generator):
             dolphinTriforceGFXSettings.set("Enhancements", "ForceFiltering", "True")
             dolphinTriforceGFXSettings.set("Enhancements", "ArbitraryMipmapDetection", "True")
             dolphinTriforceGFXSettings.set("Enhancements", "DisableCopyFilter", "True")
-            dolphinTriforceGFXSettings.set("Enhancements", "ForceTrueColor", "True")            
+            dolphinTriforceGFXSettings.set("Enhancements", "ForceTrueColor", "True")
         else:
             if dolphinTriforceGFXSettings.has_section("Hacks"):
                 dolphinTriforceGFXSettings.remove_option("Hacks", "BBoxEnable")
@@ -201,7 +202,7 @@ class DolphinTriforceGenerator(Generator):
                 dolphinTriforceGFXSettings.remove_option("Enhancements", "ForceFiltering")
                 dolphinTriforceGFXSettings.remove_option("Enhancements", "ArbitraryMipmapDetection")
                 dolphinTriforceGFXSettings.remove_option("Enhancements", "DisableCopyFilter")
-                dolphinTriforceGFXSettings.remove_option("Enhancements", "ForceTrueColor")  
+                dolphinTriforceGFXSettings.remove_option("Enhancements", "ForceTrueColor")
 
         # Internal resolution settings
         if system.isOptSet('internal_resolution'):
@@ -364,6 +365,25 @@ $DI Seed Blanker
 """)
             dolphinTriforceGameSettingsGVSJ8P.close()
 
+        # Save state required for successful launch.
+        if not os.path.exists(batoceraFiles.dolphinTriforceConfig + "/StateSaves/" + gamecode + ".s01"):
+            shutil.copyfile("/usr/share/dolphin-triforce/StateSaves/" + gamecode + ".s01", "/userdata/system/configs/dolphin-triforce/StateSaves/" + gamecode + ".s01")
+
+        # Download from the Github in case local file fails
+        if not os.path.exists(batoceraFiles.dolphinTriforceConfig + "/StateSaves/" + gamecode + ".s01"):
+            try:
+                myfile = requests.get("https://github.com/Hew-ux/batocera.linux/raw/batocerian/package/batocera/emulators/dolphin-triforce/" + gamecode + ".s01")
+                open("/userdata/system/configs/dolphin-triforce/StateSaves/" + gamecode + ".s01", 'wb').write(myfile.content)
+                if myfile and myfile.status_code == 200:
+                    open("/userdata/system/configs/dolphin-triforce/StateSaves/" + gamecode + ".s01", 'wb').write(myfile.content)
+                else:
+                    print("Network connection found, but " + gamecode + ".s01 failed to download.")
+            except:
+                print( gamecode + ".s01 failed to download, check your network connection.")
+
+        if not os.path.exists(batoceraFiles.dolphinTriforceGameSettings + "/" + gamecode + ".ini"):
+            dolphinTriforceGameSettingsGVSJ8P = open(batoceraFiles.dolphinTriforceGameSettings + "/" + gamecode + ".ini", "w")
+
         # GGPE01 Mario Kart GP 1
 
         if not os.path.exists(batoceraFiles.dolphinTriforceGameSettings + "/GGPE01.ini"):
@@ -389,6 +409,27 @@ $Loop fix
 EmulationIssues = AM-Baseboard
 """)
             dolphinTriforceGameSettingsGGPE01.close()
+
+
+        gamecode = "GGPE01"
+
+        # Save state required for successful launch.
+        if not os.path.exists(batoceraFiles.dolphinTriforceConfig + "/StateSaves/" + gamecode + ".s01"):
+            shutil.copyfile("/usr/share/dolphin-triforce/StateSaves/" + gamecode + ".s01", "/userdata/system/configs/dolphin-triforce/StateSaves/" + gamecode + ".s01")
+
+        # Download from the Github in case local file fails
+        if not os.path.exists(batoceraFiles.dolphinTriforceConfig + "/StateSaves/" + gamecode + ".s01"):
+            try:
+                myfile = requests.get("https://github.com/Hew-ux/batocera.linux/raw/batocerian/package/batocera/emulators/dolphin-triforce/" + gamecode + ".s01")
+                if myfile and myfile.status_code == 200:
+                    open("/userdata/system/configs/dolphin-triforce/StateSaves/" + gamecode + ".s01", 'wb').write(myfile.content)
+                else:
+                    print("Network connection found, but " + gamecode + ".s01 failed to download.")
+            except:
+                print( gamecode + ".s01 failed to download, check your network connection.")
+
+        if not os.path.exists(batoceraFiles.dolphinTriforceGameSettings + "/" + gamecode + ".ini"):
+            dolphinTriforceGameSettingsGGPE01 = open(batoceraFiles.dolphinTriforceGameSettings + "/" + gamecode + ".ini", "w")
 
         # GGPE02 Mario Kart GP 2
 
@@ -448,7 +489,7 @@ $SeatLoopPatch
 99 credits
 """)
             dolphinTriforceGameSettingsGGPE02.close()
-        
+
         # # Cheats aren't in key = value format, so the allow_no_value option is needed.
         # dolphinTriforceGameSettingsGGPE01 = configparser.ConfigParser(interpolation=None, allow_no_value=True,delimiters=';')
         # # To prevent ConfigParser from converting to lower case
@@ -483,7 +524,7 @@ $SeatLoopPatch
         # No environment variables work for now, paths are coded in above.
         return Command.Command(array=commandArray, env={"XDG_CONFIG_HOME":batoceraFiles.CONF, "XDG_DATA_HOME":batoceraFiles.SAVES, "QT_QPA_PLATFORM":"xcb"})
         #return Command.Command(array=commandArray)
-            
+
     def getInGameRatio(self, config, gameResolution, rom):
         if 'dolphin_aspect_ratio' in config:
             if config['dolphin_aspect_ratio'] == "1":
