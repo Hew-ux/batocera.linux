@@ -317,7 +317,7 @@ then
     then
         # compress-force used here to have the zstd-compressor check the total file size instead of btrfs before committing to compressing
         # btrfs's algorithm can be innaccurate when compared with zstd-compressor
-        mount -o remount,compress-force=zstd,autodefrag /userdata || exit 1
+        mount -o remount,compress=zstd,autodefrag /userdata || exit 1
     fi
 fi
 
