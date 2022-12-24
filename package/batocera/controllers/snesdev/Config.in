@@ -1,0 +1,4 @@
+config BR2_PACKAGE_SNESDEV
+        bool "snesdev"
+
+comment "SNESDev is a user-space driver for the RetroPie GPIO Adapter"
