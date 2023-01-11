@@ -5,6 +5,9 @@
 ################################################################################
 # Version: Commits on Jul 21, 2022
 LIBRETRO_FBNEO_VERSION = v1.0.0.02
+ifeq ($(BR2_PACKAGE_BATOCERA_TARGET_BCM2837)$(BR2_PACKAGE_BATOCERA_TARGET_BCM2711),y)
+LIBRETRO_FBNEO_VERSION = 3cbdf408e00a362563e5b067d71de72ed44672ab
+endif
 LIBRETRO_FBNEO_SITE = $(call github,libretro,FBNeo,$(LIBRETRO_FBNEO_VERSION))
 LIBRETRO_FBNEO_LICENSE = Non-commercial
 
